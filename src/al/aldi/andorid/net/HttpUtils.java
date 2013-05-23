@@ -1,6 +1,5 @@
 package al.aldi.andorid.net;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,8 +44,10 @@ import org.json.JSONObject;
  *
  */
 public class HttpUtils {
-    public static final String	LOG_TAG				= "al.aldi.andorid.net.HttpUtils";
-    public static final String	STATUS_CODE_SUCCESS	= "200";
+    public static final int    SOCKET_TIMEOUT      = 15000;
+    public static final int    CONNECTION_TIMEOUT  = 15000;
+    public static final String LOG_TAG             = "al.aldi.andorid.net.HttpUtils";
+    public static final String STATUS_CODE_SUCCESS = "200";
 
     /**
      * Sends a get request to the following url and returns true if Server
@@ -131,11 +132,11 @@ public class HttpUtils {
                 HttpParams httpParameters = new BasicHttpParams();
                 // Set the timeout in milliseconds until a connection is established.
                 // The default value is zero, that means the timeout is not used.
-                int timeoutConnection = 3000;
+                int timeoutConnection = CONNECTION_TIMEOUT;
                 HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
                 // Set the default socket timeout (SO_TIMEOUT)
                 // in milliseconds which is the timeout for waiting for data.
-                int timeoutSocket = 5000;
+                int timeoutSocket = SOCKET_TIMEOUT;
                 HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
@@ -182,11 +183,11 @@ public class HttpUtils {
         HttpParams httpParameters = new BasicHttpParams();
         // Set the timeout in milliseconds until a connection is established.
         // The default value is zero, that means the timeout is not used.
-        int timeoutConnection = 3000;
+        int timeoutConnection = CONNECTION_TIMEOUT;
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         // Set the default socket timeout (SO_TIMEOUT)
         // in milliseconds which is the timeout for waiting for data.
-        int timeoutSocket = 5000;
+        int timeoutSocket = SOCKET_TIMEOUT;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
 
         HttpClient client = new DefaultHttpClient(httpParameters);
@@ -211,9 +212,9 @@ public class HttpUtils {
      */
     private static DefaultHttpClient getDefaultClient() {
         HttpParams httpParameters = new BasicHttpParams();
-        int timeoutConnection = 3000;
+        int timeoutConnection = CONNECTION_TIMEOUT;
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
-        int timeoutSocket = 5000;
+        int timeoutSocket = SOCKET_TIMEOUT;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         return new DefaultHttpClient(httpParameters);
     }
