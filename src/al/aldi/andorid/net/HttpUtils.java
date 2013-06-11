@@ -260,11 +260,26 @@ public class HttpUtils {
     public static JSONObject httpEntitiyToJson(HttpEntity entity) throws JSONException {
         JSONObject jObject = null;
         String jsonStr = httpEntitiyToString(entity);
-        System.out.println(jsonStr);
         jsonStr = StringEscapeUtils.unescapeJava(jsonStr); /* need to excape from \n form */
         int strSize = jsonStr.length();
         jsonStr = jsonStr.substring(1, strSize - 1); /* removing leading quotes */
         jObject = new JSONObject(jsonStr);
         return jObject;
+    }
+
+    /**
+     * Returns the entity's content as an escaped String.
+     *
+     * @param entity
+     * @return
+     */
+    public static String httpEntitiyToSafeString(HttpEntity entity) {
+        String jsonStr = httpEntitiyToString(entity);
+        jsonStr = StringEscapeUtils.unescapeJava(jsonStr); /* need to excape from \n form */
+        if (jsonStr.startsWith("\"")&& jsonStr.endsWith("\"")) {
+            int strSize = jsonStr.length();
+            jsonStr = jsonStr.substring(1, strSize - 1); /* removing leading quotes */
+        }
+        return jsonStr;
     }
 }

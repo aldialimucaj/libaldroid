@@ -1,6 +1,8 @@
 package al.aldi.android.view;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.widget.ImageView;
 
@@ -15,6 +17,15 @@ public class ImageUtils {
         else
         {
             img.setAlpha(alpha);
+        }
+    }
+
+    static public Drawable getAndroidDrawable(String pDrawableName){
+        int resourceId=Resources.getSystem().getIdentifier(pDrawableName, "drawable", "android");
+        if(resourceId==0){
+            return null;
+        } else {
+            return Resources.getSystem().getDrawable(resourceId);
         }
     }
 }
