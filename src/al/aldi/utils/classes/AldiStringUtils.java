@@ -56,4 +56,16 @@ public class AldiStringUtils {
         return concatString;
 
     }
+    
+    /**
+     * Checks if the string starts with HTTP or HTTPS
+     * 
+     * Like http:// or https://
+     * 
+     * @param string
+     * @return
+     */
+    public static boolean startsWithHttpS(String string) {
+        return string.startsWith("http://") || string.startsWith("https://");
+    }
 }
