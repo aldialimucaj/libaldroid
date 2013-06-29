@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,9 +41,9 @@ import org.json.JSONObject;
 
 /**
  * Helper class for sending and receiving http requests.
- *
+ * 
  * @author Aldi Alimucaj
- *
+ * 
  */
 public class HttpUtils {
     public static final int    SOCKET_TIMEOUT      = 15000;
@@ -52,7 +54,7 @@ public class HttpUtils {
     /**
      * Sends a get request to the following url and returns true if Server
      * responds with successful request. CODE 200
-     *
+     * 
      * @param url
      *            url to be called
      * @param params
@@ -91,7 +93,7 @@ public class HttpUtils {
 
         } catch (ClientProtocolException e) {
             System.err.println(e.getMessage());
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
         return res;
@@ -99,7 +101,7 @@ public class HttpUtils {
 
     /**
      * Returns a client which ignores ssl validation and verification.
-     *
+     * 
      * @param client
      * @return
      */
@@ -119,7 +121,7 @@ public class HttpUtils {
     /**
      * After sending asynchronously the get request this method waits for
      * the response which it then sends back to the caller.
-     *
+     * 
      * @param url
      *            URI to call
      * @return the response from the other peer
@@ -175,7 +177,7 @@ public class HttpUtils {
 
     /**
      * Sends post request to url. Ignores the response.
-     *
+     * 
      * @param url
      * @return true if response code is 200
      */
@@ -207,7 +209,7 @@ public class HttpUtils {
 
     /**
      * returns a client with predefined parameters for timeout and socket timeout.
-     *
+     * 
      * @return
      */
     private static DefaultHttpClient getDefaultClient() {
@@ -221,7 +223,7 @@ public class HttpUtils {
 
     /**
      * Reads the content out of the entity and returns it as a string.
-     *
+     * 
      * @param entity
      * @return http content
      */
@@ -252,7 +254,7 @@ public class HttpUtils {
 
     /**
      * Returns the entity's content as a JSONObject.
-     *
+     * 
      * @param entity
      * @return
      * @throws JSONException
@@ -269,14 +271,14 @@ public class HttpUtils {
 
     /**
      * Returns the entity's content as an escaped String.
-     *
+     * 
      * @param entity
      * @return
      */
     public static String httpEntitiyToSafeString(HttpEntity entity) {
         String jsonStr = httpEntitiyToString(entity);
         jsonStr = StringEscapeUtils.unescapeJava(jsonStr); /* need to excape from \n form */
-        if (jsonStr.startsWith("\"")&& jsonStr.endsWith("\"")) {
+        if (jsonStr.startsWith("\"") && jsonStr.endsWith("\"")) {
             int strSize = jsonStr.length();
             jsonStr = jsonStr.substring(1, strSize - 1); /* removing leading quotes */
         }
