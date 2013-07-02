@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.InetAddress;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,6 +49,22 @@ public class HttpUtils {
     public static final String LOG_TAG             = "al.aldi.andorid.net.HttpUtils";
     public static final String STATUS_CODE_SUCCESS = "200";
 
+    private int                socketTimeout       = 0;
+    private int                connectionTimeout   = 0;
+    
+    
+
+    public HttpUtils() {
+        this.socketTimeout = SOCKET_TIMEOUT;
+        this.connectionTimeout = CONNECTION_TIMEOUT;
+    }
+
+    public HttpUtils(int socketTimeout, int connectionTimeout) {
+        super();
+        this.socketTimeout = socketTimeout;
+        this.connectionTimeout = connectionTimeout;
+    }
+
     /**
      * Sends a get request to the following url and returns true if Server
      * responds with successful request. CODE 200
@@ -61,7 +75,7 @@ public class HttpUtils {
      *            hashmap with params
      * @return ture if code 200
      */
-    public static HttpResponse sendPostRequestWithParams(final String url, final HashMap<String, String> params) {
+    public HttpResponse sendPostRequestWithParams(final String url, final HashMap<String, String> params) {
         HttpContext localContext = new BasicHttpContext();
         HttpResponse res = null;
 
@@ -94,7 +108,11 @@ public class HttpUtils {
         } catch (ClientProtocolException e) {
             System.err.println(e.getMessage());
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            if (null != e.getMessage()) {
+                System.err.println(e.getMessage());
+            } else {
+                e.printStackTrace();
+            }
         }
         return res;
     }
@@ -105,7 +123,7 @@ public class HttpUtils {
      * @param client
      * @return
      */
-    private static HttpClient ignoreSslClient(HttpClient client) {
+    private HttpClient ignoreSslClient(HttpClient client) {
         try {
             SSLSocketFactory ssf = new MySSLSocketFactory(null, null);
             ssf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
@@ -126,7 +144,7 @@ public class HttpUtils {
      *            URI to call
      * @return the response from the other peer
      */
-    public static HttpResponse sendGetRequest(final String url) {
+    public HttpResponse sendGetRequest(final String url) {
         Callable<HttpResponse> request = new Callable<HttpResponse>() {
 
             @Override
@@ -134,11 +152,11 @@ public class HttpUtils {
                 HttpParams httpParameters = new BasicHttpParams();
                 // Set the timeout in milliseconds until a connection is established.
                 // The default value is zero, that means the timeout is not used.
-                int timeoutConnection = CONNECTION_TIMEOUT;
+                int timeoutConnection = connectionTimeout;
                 HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
                 // Set the default socket timeout (SO_TIMEOUT)
                 // in milliseconds which is the timeout for waiting for data.
-                int timeoutSocket = SOCKET_TIMEOUT;
+                int timeoutSocket = socketTimeout;
                 HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
 
                 HttpClient client = new DefaultHttpClient(httpParameters);
@@ -181,15 +199,15 @@ public class HttpUtils {
      * @param url
      * @return true if response code is 200
      */
-    public static boolean sendPostRequest(String url) {
+    public boolean sendPostRequest(String url) {
         HttpParams httpParameters = new BasicHttpParams();
         // Set the timeout in milliseconds until a connection is established.
         // The default value is zero, that means the timeout is not used.
-        int timeoutConnection = CONNECTION_TIMEOUT;
+        int timeoutConnection = connectionTimeout;
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         // Set the default socket timeout (SO_TIMEOUT)
         // in milliseconds which is the timeout for waiting for data.
-        int timeoutSocket = SOCKET_TIMEOUT;
+        int timeoutSocket = socketTimeout;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
 
         HttpClient client = new DefaultHttpClient(httpParameters);
@@ -212,11 +230,11 @@ public class HttpUtils {
      * 
      * @return
      */
-    private static DefaultHttpClient getDefaultClient() {
+    private DefaultHttpClient getDefaultClient() {
         HttpParams httpParameters = new BasicHttpParams();
-        int timeoutConnection = CONNECTION_TIMEOUT;
+        int timeoutConnection = connectionTimeout;
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
-        int timeoutSocket = SOCKET_TIMEOUT;
+        int timeoutSocket = socketTimeout;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         return new DefaultHttpClient(httpParameters);
     }
@@ -227,7 +245,7 @@ public class HttpUtils {
      * @param entity
      * @return http content
      */
-    public static String httpEntitiyToString(HttpEntity entity) {
+    public String httpEntitiyToString(HttpEntity entity) {
         StringBuilder builder = new StringBuilder();
         InputStream content = null;
         try {
@@ -259,7 +277,7 @@ public class HttpUtils {
      * @return
      * @throws JSONException
      */
-    public static JSONObject httpEntitiyToJson(HttpEntity entity) throws JSONException {
+    public JSONObject httpEntitiyToJson(HttpEntity entity) throws JSONException {
         JSONObject jObject = null;
         String jsonStr = httpEntitiyToString(entity);
         jsonStr = StringEscapeUtils.unescapeJava(jsonStr); /* need to excape from \n form */
@@ -275,7 +293,7 @@ public class HttpUtils {
      * @param entity
      * @return
      */
-    public static String httpEntitiyToSafeString(HttpEntity entity) {
+    public String httpEntitiyToSafeString(HttpEntity entity) {
         String jsonStr = httpEntitiyToString(entity);
         jsonStr = StringEscapeUtils.unescapeJava(jsonStr); /* need to excape from \n form */
         if (jsonStr.startsWith("\"") && jsonStr.endsWith("\"")) {
