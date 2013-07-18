@@ -2,6 +2,12 @@ package al.aldi.utils.classes;
 
 public class AldiStringUtils {
 
+    /**
+     * Joins the array into a single string.
+     * 
+     * @param strArray
+     * @return joined array
+     */
     public static String arrayToString(String[] strArray) {
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < strArray.length; i++) {
@@ -39,7 +45,7 @@ public class AldiStringUtils {
      * Joins the array with a prefix and suffix
      *
      * @param strArray the array to be joined
-     * @param prefix - the prefix to be added before the array token before joined
+     * @param prefix - the prefix to be added before every array token is joined
      * @param separator - the suffix to be added after the token. It is not added in the last token.
      * @return joined array
      */

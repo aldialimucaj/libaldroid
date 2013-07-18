@@ -2,3 +2,4 @@
 libaldi/bin
 *.class
 
+*.log

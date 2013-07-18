@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 @SuppressLint("NewApi")
 public class ImageUtils {
+    @SuppressWarnings("deprecation")
     public static void setImageAlpha(ImageView img, int alpha)
     {
         if(Build.VERSION.SDK_INT > 15)
