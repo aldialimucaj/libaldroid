@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 /**
  * Helper Class to access Android SharedPreferences
  * 
- * @author Aldi Alimuçaj
+ * @author Aldi Alimucaj
  * 
  */
 public class PreferencesUtil {
